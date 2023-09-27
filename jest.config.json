@@ -1,0 +1,22 @@
+{
+  "transform": {
+    "^.+\\.[jt]s$": [
+      "@swc/jest",
+      {
+        "jsc": {
+          "parser": {
+            "syntax": "typescript",
+            "dynamicImport": false,
+            "decorators": false
+          },
+          "target": "es2022",
+          "loose": false,
+          "externalHelpers": false
+        },
+        "minify": false,
+        "sourceMaps": "inline"
+      }
+    ]
+  },
+  "testEnvironment": "node"
+}
