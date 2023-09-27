@@ -1,7 +1,11 @@
 {
-  "name": "logger-factory-js",
+  "name": "@zerospec-dev/logger-factory-js",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zerospec-dev/logger-factory-js.git"
+  },
   "main": "index.ts",
   "scripts": {
     "test": "jest"
