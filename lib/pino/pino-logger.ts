@@ -70,7 +70,7 @@ export class PinoLogger implements Logger {
     }
   }
 
-  private toRelational(fileName: string | null): string {
+  private toRelational(fileName: string | null | undefined): string {
     if (fileName == null) return 'unknown file';
     if (fileName.startsWith(process.cwd())) {
       return fileName.slice(process.cwd().length + 1);

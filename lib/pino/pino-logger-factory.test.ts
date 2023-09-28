@@ -5,7 +5,7 @@ import * as util from 'util';
 import { pino } from 'pino';
 
 import { PinoLoggerFactory } from './pino-logger-factory';
-import { ILoggerFactory, LoggerConfig } from '../types';
+import { LoggerFactory, LoggerConfig } from '../types';
 
 const removeFile = util.promisify(fs.unlink);
 const readFile = util.promisify(fs.readFile);
@@ -33,7 +33,7 @@ describe('pino/pino-logger-factory', () => {
     },
   };
 
-  let sut: ILoggerFactory | undefined;
+  let sut: LoggerFactory | undefined;
   afterEach(() => {
     sut = undefined;
   });
@@ -47,7 +47,9 @@ describe('pino/pino-logger-factory', () => {
 
   it('creates root logger with config', async () => {
     sut = new PinoLoggerFactory({
-      root: pinoConfig,
+      configs: {
+        root: pinoConfig,
+      },
     });
 
     const logger = sut.getLogger('');
@@ -63,7 +65,7 @@ describe('pino/pino-logger-factory', () => {
         ts: expect.any(Number),
         context: {},
         category: '',
-        caller: 'lib/pino/pino-logger-factory.test.ts:85',
+        caller: 'lib/pino/pino-logger-factory.test.ts:87',
         msg: 'info',
       },
     ]);
@@ -71,9 +73,11 @@ describe('pino/pino-logger-factory', () => {
 
   it('creates child logger', async () => {
     sut = new PinoLoggerFactory({
-      root: pinoConfig,
-      'abc.def': {
-        level: 'debug',
+      configs: {
+        root: pinoConfig,
+        'abc.def': {
+          level: 'debug',
+        },
       },
     });
 
@@ -92,7 +96,7 @@ describe('pino/pino-logger-factory', () => {
         ts: expect.any(Number),
         context: {},
         category: 'abc.def',
-        caller: 'lib/pino/pino-logger-factory.test.ts:108',
+        caller: 'lib/pino/pino-logger-factory.test.ts:112',
         msg: 'info',
       },
       {
@@ -101,7 +105,7 @@ describe('pino/pino-logger-factory', () => {
         ts: expect.any(Number),
         context: {},
         category: 'abc.def',
-        caller: 'lib/pino/pino-logger-factory.test.ts:111',
+        caller: 'lib/pino/pino-logger-factory.test.ts:115',
         msg: 'debug',
       },
     ]);
@@ -109,9 +113,11 @@ describe('pino/pino-logger-factory', () => {
 
   it('handles mdc', async () => {
     sut = new PinoLoggerFactory({
-      root: pinoConfig,
-      'abc.def': {
-        level: 'debug',
+      configs: {
+        root: pinoConfig,
+        'abc.def': {
+          level: 'debug',
+        },
       },
     });
 
@@ -131,7 +137,7 @@ describe('pino/pino-logger-factory', () => {
           test: 123,
         },
         category: 'abc.def',
-        caller: 'lib/pino/pino-logger-factory.test.ts:146',
+        caller: 'lib/pino/pino-logger-factory.test.ts:152',
         msg: 'debug',
       },
     ]);

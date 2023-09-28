@@ -1,2 +1,2 @@
-export * from './lib/logger-factory';
+export * from './lib/logger-pool';
 export * from './lib/types';

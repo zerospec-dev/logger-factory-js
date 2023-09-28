@@ -1,27 +1,29 @@
 import pino from "pino";
-import { ILoggerFactory, LoggerFactoryConfig } from "../types";
+import { LoggerFactory, LoggerPoolConfig } from "../types";
 import { PinoLogger } from "./pino-logger";
 
 /**
  * ロガーを提供します。
  */
-export class PinoLoggerFactory implements ILoggerFactory {
-  private readonly config: LoggerFactoryConfig;
+export class PinoLoggerFactory implements LoggerFactory {
+  private readonly config: LoggerPoolConfig['configs'];
 
   private readonly loggers = new Map<string, PinoLogger>();
 
   private readonly mdc = new Map<string, unknown>();
 
-  public constructor(config?: LoggerFactoryConfig) {
+  public constructor(config?: LoggerPoolConfig) {
     if (config == null) {
       config = {
-        root: { level: 'info' },
+        configs: {
+          root: { level: 'info' },
+        }
       };
     }
-    this.config = config;
+    this.config = config.configs;
 
     const root = pino({
-      ...config.root,
+      ...config.configs.root,
       base: undefined,
       errorKey: 'error',
       timestamp: () => `, "ts": ${new Date().getTime() / 1000 }`, // as unix time
@@ -35,7 +37,7 @@ export class PinoLoggerFactory implements ILoggerFactory {
 
     this.loggers.set('', new PinoLogger(this, root, {
       category: '',
-      useCaller: config.root.useCaller === true,
+      useCaller: config.configs.root.useCaller === true,
     }));
   }
 
